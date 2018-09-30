@@ -2,6 +2,7 @@ package com.devarthur.messageapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -9,14 +10,23 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class LoginActivity extends AppCompatActivity {
 
-    // TODO: Add member variables here:
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+
+    //Firebase service
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // TODO: Grab an instance of FirebaseAuth
+        mAuth = FirebaseAuth.getInstance();
 
     }
 
@@ -54,11 +64,33 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // TODO: Complete the attemptLogin() method
+
     private void attemptLogin() {
 
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
 
-        // TODO: Use FirebaseAuth to sign in with email & password
+        if(email.equals("") || password.equals("")) return;
+        Toast.makeText(LoginActivity.this, "Login in progress...", Toast.LENGTH_SHORT).show();
+
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                Log.d("App","signInWithEmail() On Complete: " + task.isSuccessful());
+
+                if(!task.isSuccessful()){
+                    Log.d("App","Error signing in: " + task.getException());
+
+                }else{
+                    Intent finishLogin = new Intent(LoginActivity.this,MainChatActivity.class);
+                    finish();
+                    startActivity(finishLogin);
+                }
+
+            }
+        });
+
 
 
 
