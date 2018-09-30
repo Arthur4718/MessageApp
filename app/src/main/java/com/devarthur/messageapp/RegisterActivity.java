@@ -2,6 +2,7 @@ package com.devarthur.messageapp;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,6 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     // Constants
     public static final String CHAT_PREFS = "ChatPrefs";
     public static final String DISPLAY_NAME_KEY = "username";
+    public static final int PASSWORD_MIN_LEN = 6;
 
     // TODO: Add member variables here:
     // UI references.
@@ -30,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
     private EditText mConfirmPasswordView;
+    private Button mRegisterButton;
 
     // Firebase instance variables
     private FirebaseAuth mAuth;
@@ -44,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswordView = (EditText) findViewById(R.id.register_password);
         mConfirmPasswordView = (EditText) findViewById(R.id.register_confirm_password);
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.register_username);
+        mRegisterButton = (Button) findViewById(R.id.register_sign_up_button);
 
         // Keyboard sign in action
         mConfirmPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -54,6 +60,13 @@ public class RegisterActivity extends AppCompatActivity {
                     return true;
                 }
                 return false;
+            }
+        });
+
+        mRegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createFirebaseUser();
             }
         });
 
@@ -104,7 +117,9 @@ public class RegisterActivity extends AppCompatActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // TODO: Call create FirebaseUser() here
+
+            createFirebaseUser();
+
 
         }
     }
@@ -118,11 +133,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         String confirmPassword = mConfirmPasswordView.getText().toString();
 
-        return confirmPassword.equals(password) && password.length() > 6;
+        return confirmPassword.equals(password) && password.length() > PASSWORD_MIN_LEN;
     }
 
 
-    private void CreateFirebaseUser(){
+    private void createFirebaseUser(){
 
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
@@ -133,10 +148,12 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                Log.d("MessageApp", "createUser onComplete" + task.isSuccessful());
+                Log.d("App", "createUser onComplete" + task.isSuccessful());
+                Toast.makeText(RegisterActivity.this, "Sucesss", Toast.LENGTH_SHORT).show();
 
                 if(!task.isSuccessful()){
-                    Log.d("MessageApp", "user creation failed" + task.isSuccessful());
+                    Log.d("App", "user creation failed" + task.isSuccessful());
+                    showErrorDialog("Registration attempt failed");
 
                 }
 
@@ -149,6 +166,16 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     // TODO: Create an alert dialog to show in case registration failed
+    private void showErrorDialog(String message){
+
+        new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
+    }
 
 
 
