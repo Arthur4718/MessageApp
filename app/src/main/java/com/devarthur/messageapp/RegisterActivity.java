@@ -1,5 +1,7 @@
 package com.devarthur.messageapp;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -155,6 +157,11 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.d("App", "user creation failed" + task.isSuccessful());
                     showErrorDialog("Registration attempt failed");
 
+                }else{
+                    saveDisplayName();
+                    Intent finishRegistration = new Intent(RegisterActivity.this,LoginActivity.class);
+                    finish();
+                    startActivity(finishRegistration);
                 }
 
             }
@@ -162,10 +169,18 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    // TODO: Save the display name to Shared Preferences
+    //An alternate way to store data is the SharedPreferences
+    private void saveDisplayName(){
+
+        String displayName = mUsernameView.getText().toString();
+        SharedPreferences prefs = getSharedPreferences(CHAT_PREFS, 0);
+        //Creates the key, gets the user name and apply it to the sharedprefs
+        prefs.edit().putString(DISPLAY_NAME_KEY, displayName).apply();
+
+    }
 
 
-    // TODO: Create an alert dialog to show in case registration failed
+    //Show a simple alert if something went wrong with the connnection to firebase.
     private void showErrorDialog(String message){
 
         new AlertDialog.Builder(this)
