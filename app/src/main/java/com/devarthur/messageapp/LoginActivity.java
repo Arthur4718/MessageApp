@@ -3,6 +3,7 @@ package com.devarthur.messageapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -53,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // Executed when Sign in button pressed
     public void signInExistingUser(View v)   {
-        // TODO: Call attemptLogin() here
+       attemptLogin();
 
     }
 
@@ -81,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if(!task.isSuccessful()){
                     Log.d("App","Error signing in: " + task.getException());
+                    showErrorDialog("Autentication Failed");
 
                 }else{
                     Intent finishLogin = new Intent(LoginActivity.this,MainChatActivity.class);
@@ -96,7 +98,16 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    // TODO: Show error on screen with an alert dialog
+    private void showErrorDialog(String message){
+
+        new AlertDialog.Builder(this)
+                .setTitle("Opps")
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
+    }
 
 
 
