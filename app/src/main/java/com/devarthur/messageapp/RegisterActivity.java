@@ -150,14 +150,14 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                Log.d("App", "createUser onComplete" + task.isSuccessful());
-                Toast.makeText(RegisterActivity.this, "Sucesss", Toast.LENGTH_SHORT).show();
+
 
                 if(!task.isSuccessful()){
                     Log.d("App", "user creation failed" + task.isSuccessful());
                     showErrorDialog("Registration attempt failed");
 
                 }else{
+                    Log.d("App", "createUser onComplete" + task.isSuccessful());
                     saveDisplayName();
                     Intent finishRegistration = new Intent(RegisterActivity.this,LoginActivity.class);
                     finish();
