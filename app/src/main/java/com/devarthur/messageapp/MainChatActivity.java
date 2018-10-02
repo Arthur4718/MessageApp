@@ -73,7 +73,7 @@ public class MainChatActivity extends AppCompatActivity {
     private void sendMessage() {
 
         Log.d("App", "Message Sent");
-        // TODO: Grab the text the user typed in and push the message to Firebase
+
         String userInput = mInputText.getText().toString();
         if(!userInput.equals("")){
             InstantMessage userMessage = new InstantMessage(userInput, mDisplayName);

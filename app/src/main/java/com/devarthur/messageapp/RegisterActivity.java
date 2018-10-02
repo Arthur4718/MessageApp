@@ -144,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        //Since the method createUser returns a task, we are going to listen for teh completed task
+        //Since the method createUser returns a task, we are going to listen for the completed task
         //Then we should create our new user
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -173,6 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void saveDisplayName(){
 
         String displayName = mUsernameView.getText().toString();
+        //Storing the name of the user.
         SharedPreferences prefs = getSharedPreferences(CHAT_PREFS, 0);
         //Creates the key, gets the user name and apply it to the sharedprefs
         prefs.edit().putString(DISPLAY_NAME_KEY, displayName).apply();
