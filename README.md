@@ -144,8 +144,7 @@ public class InstantMessage {
 ```
 
 # Send Message method and how to push data into firebase dabatase. 
-
-Firebase is always his layout, by the time i made this project i had to create a firebase dabatse with the Test Mode active. In this mode, the read and write funcion are defined as true to all who have the firebase database URL. Since its an example project you should consider upgrading this method in order to only permit access to certain apps or services that you would like to work within your dabatase. 
+By the time i made this project i had to create a firebase dabatse with the Test Mode active. In this mode, the read and write funcion are defined as true to all who have the firebase database URL. Since its an example project you should consider upgrading this method in order to only permit access to certain apps or services that you would like to work within your dabatase. 
 
 Inside the MainChatActivity class we handle the user input by getting the text from the texview. Here we create a InstantMessage object with message and username as constructors. Using the FirebaseDatabase reference it is possible to push the user message object. 
 
