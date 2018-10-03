@@ -82,7 +82,7 @@ Here a sample code from the RegisterAcvitivy.Java.
 
 ```
 
-Finally, using the FirebaseAuth object we call the createUserWithEmailAndPassword, sending e-mail and password as parameters and adding the OnCompleteListener to check if the task was successeful. 
+Using the FirebaseAuth object we call the createUserWithEmailAndPassword, sending e-mail and password as parameters and adding the OnCompleteListener to check if the task was successeful. 
 
 ```Java
 
@@ -108,3 +108,61 @@ mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this,
         });
 
 ```
+
+# Creating an InstantMessage Class. 
+
+In order to send messages to firebase we need to create class that can hold the userMessage and userName. 
+
+```Java
+package com.devarthur.messageapp;
+
+public class InstantMessage {
+
+    private String message;
+    private String author;
+
+    public InstantMessage(String message, String author) {
+        this.message = message;
+        this.author = author;
+    }
+
+    public InstantMessage() {
+
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getAuthor(){
+        return author;
+    }
+}
+
+
+
+```
+
+# Send Message method and how to push data into firebase dabatase. 
+By the time i made this project i had to create a firebase dabatse with the Test Mode active. In this mode, the read and write funcion are defined as true to all who have the firebase database URL. Since its an example project you should consider upgrading this method in order to only permit access to certain apps or services that you would like to work within your dabatase. 
+
+Inside the MainChatActivity class we handle the user input by getting the text from the texview. Here we create a InstantMessage object with message and username as constructors. Using the FirebaseDatabase reference it is possible to push the user message object. 
+
+```Java
+private void sendMessage() {
+
+        Log.d("App", "Message Sent");
+
+        String userInput = mInputText.getText().toString();
+        if(!userInput.equals("")){
+            InstantMessage userMessage = new InstantMessage(userInput, mDisplayName);
+            mDatabaseReference.child("messages").push().setValue(userMessage);
+            mInputText.setText("");
+
+        }
+
+    }
+
+```
+
+
